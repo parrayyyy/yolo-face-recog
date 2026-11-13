@@ -74,7 +74,7 @@ face_app = FaceAnalysis(
 
 face_app.prepare(
     ctx_id=-1,
-    det_size=(640, 640)
+    det_size=(320, 320)
 )
 
 print("Models loaded successfully!")
@@ -177,31 +177,39 @@ def save_database(database):
 # MATCH FACE
 # -------------------------------
 
-def recognize_face(embedding):
 
-    database = load_database()
+def recognize_face(embedding, database=None):
+
+    if database is None:
+        database = load_database()
 
     best_name = "Unknown"
     best_score = -1
+
+    embedding = np.asarray(
+        embedding,
+        dtype=np.float32
+    )
 
     for name, stored_embeddings in database.items():
 
         for stored in stored_embeddings:
 
-            stored = np.array(stored, dtype=np.float32)
-
-            # Cosine similarity
-            score = float(
-                np.dot(embedding, stored)
+            stored = np.asarray(
+                stored,
+                dtype=np.float32
             )
 
-            if score > best_score:
+            if stored.shape != embedding.shape:
+                continue
 
+            score = float(np.dot(embedding, stored))
+
+            if score > best_score:
                 best_score = score
                 best_name = name
 
     if best_score < SIMILARITY_THRESHOLD:
-
         return "Unknown", best_score
 
     return best_name, best_score
