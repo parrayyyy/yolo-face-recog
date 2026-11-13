@@ -1,0 +1,32 @@
+
+# Python virtual environment
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Face recognition database
+known_faces/*
+!known_faces/.gitkeep
+
+# Test photographs and videos
+test_images/*
+!test_images/.gitkeep
+
+# Generated output
+output/*
+!output/.gitkeep
+
+# Downloaded AI model weights
+models/*.pt
+models/*.onnx
+
+# Environment variables and secrets
+.env
+
+# IDE files
+.vscode/
+.idea/
+
+# Python cache
+.pytest_cache/
